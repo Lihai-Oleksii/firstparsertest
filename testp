@@ -1,0 +1,26 @@
+import requests
+from bs4 import BeautifulSoup as bs
+
+headers = {'accept': '*/*',
+           'user-agent': 'your user-agent ID'
+           }
+
+
+url = 'URL'
+
+def parser(url, headers):
+    session = requests.Session()
+    request = session.get(url, headers=headers)
+    if request.status_code == 200:
+        soup = bs(request.content, 'html.parser')
+        divs = soup.find_all('div', attrs={'class': 'offer-wrapper'})
+        for div in divs:
+            title = div.find('a', attrs={'data-cy': 'listing-ad-title'}).text
+            href = div.find('a', attrs={'data-cy': 'listing-ad-title'})['href']
+            price = div.find('p', attrs={'class': 'price'}).text
+            print(title,price,href)
+    else:
+        print('ERROR')
+
+
+parser(url, headers)
