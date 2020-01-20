@@ -2,13 +2,14 @@ import requests
 from bs4 import BeautifulSoup as bs
 
 headers = {'accept': '*/*',
-           'user-agent': 'your user-agent ID'
+           'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36'
            }
 
 
-url = 'URL'
+url = 'https://www.olx.ua/elektronika/noutbuki-i-aksesuary/noutbuki/dnepr/q-macbook/?page=1'
 
 def parser(url, headers):
+    parslist = []
     session = requests.Session()
     request = session.get(url, headers=headers)
     if request.status_code == 200:
@@ -18,7 +19,13 @@ def parser(url, headers):
             title = div.find('a', attrs={'data-cy': 'listing-ad-title'}).text
             href = div.find('a', attrs={'data-cy': 'listing-ad-title'})['href']
             price = div.find('p', attrs={'class': 'price'}).text
-            print(title,price,href)
+            parslist.append({
+                'title': title,
+                'href': href,
+                'price': price
+            })
+            #print(title,price,href)
+            print(len(parslist))
     else:
         print('ERROR')
 
